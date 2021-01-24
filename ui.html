@@ -1,0 +1,114 @@
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif;
+            max-width: 650px;
+            margin: auto;
+            width: 90%;
+            margin-top: 10%;
+            margin-bottom: 10%;
+            color: #0B0E26;
+            background: #FAFAFC;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            color: #EF96AB;
+        }
+        
+        button {
+            background: aliceblue;
+            border-radius: 10px;
+            border-width: 2px;
+            border-color: gainsboro;
+            height: 100%;
+            width: 18%;
+            margin-left: 3%;
+            border-style: dashed;
+        }
+        
+        input {
+            height: 100%;
+            width: 78%;
+        }
+        
+        .inputRow {
+            height: 50px;
+        }
+        
+        a {
+            color: #02AEF1;
+            text-decoration: none;
+        }
+        
+        .result {
+            margin-top: 3%;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 30px;
+        }
+        
+        .footer a {
+            color: lightgray;
+        }
+    </style>
+    <script>
+        async function shorten() {
+            var link = document.querySelector("input").value;
+            var place = document.querySelector("a")
+            var button = document.querySelector("button")
+            button.style.opacity = 0.5
+            button.style.borderStyle = "solid"
+            place.innerText = "稍微等一下, 马上就好啦";
+            await fetch("", {
+                "credentials": "include",
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "body": "fullLink=" + encodeURI(link),
+                "method": "POST",
+                "mode": "cors"
+            }).then(resp => {
+                return resp.json()
+            }).then(j => {
+                try {
+                    var sLink = location.origin + location.pathname + j.sLink
+                    place.innerText = sLink;
+                    place.target = "_blank"
+                    place.href = sLink
+                    if (j.status != 0) {
+                        place.href = "#"
+                        place.target = ""
+                    }
+                } catch {
+                    place.innerText = "出错惹qaq";
+                }
+                button.style.opacity = 1
+                button.style.borderStyle = "dashed"
+            })
+        }
+    </script>
+</head>
+
+<body>
+    <div class="main">
+        <h1>短链接生成器</h1>
+        <div class="inputRow">
+            <input />
+            <button onclick="javscript:shorten()">Shorten!</button>
+        </div>
+        <div class="result">
+            <a target="" href="#">↑这里是放链接的地方</a>
+        </div>
+
+    </div>
+    <div class="footer">
+        <a target="_blank" href="https://github.com/">Github</a>
+    </div>
+</body>
+
+</html>
