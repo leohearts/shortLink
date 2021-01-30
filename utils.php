@@ -26,7 +26,7 @@ if (!$ret) {
 function returnLink($fullLink) {
     $fullLink = str_replace("'", "\\'", $fullLink);
     echo "<html><body>";
-    echo "<a href='" . $fullLink . "'>Redirecting to" . SQLite3::escapeString($fullLink) . "</a>";
+    echo "<a href='" . $fullLink . "'>Redirecting to " . SQLite3::escapeString($fullLink) . "</a>";
     echo "<script>document.querySelector('a').click()</script>";
     echo "</body></html>";
 }
