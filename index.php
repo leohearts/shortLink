@@ -6,7 +6,7 @@ $sLink = $matches[0];
 
 if ($sLink !== '') {
     $fullLink = getFull($sLink);
-    header("Location: " . $fullLink);
+    returnLink($fullLink);
     exit();
 }
 

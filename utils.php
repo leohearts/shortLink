@@ -23,6 +23,14 @@ if (!$ret) {
     die($db->lastErrorMsg());
 }
 
+function returnLink($fullLink) {
+    $fullLink = str_replace("'", "\\'", $fullLink);
+    echo "<html><body>";
+    echo "<a href='" . $fullLink . "'>Redirecting to" . SQLite3::escapeString($fullLink) . "</a>";
+    echo "<script>document.querySelector('a').click()</script>";
+    echo "</body></html>";
+}
+
 function getFull($sLink) {
     global $db;
     $sql = "SELECT full from shortlink where s='" . SQLite3::escapeString($sLink) . "'";
