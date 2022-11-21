@@ -6,6 +6,9 @@ $sLink = $matches[0];
 
 if ($sLink !== '' && $sLink !== 'index') {
     $fullLink = getFull($sLink);
+    if ($fullLink == '') {
+        die("404");
+    }
     returnLink($fullLink);
     exit();
 }
