@@ -4,7 +4,7 @@ $sLink = basename($_SERVER['REDIRECT_URL']);
 preg_match("/[a-zA-Z0-9-_=]*/", $sLink, $matches);
 $sLink = $matches[0];
 
-if ($sLink !== '') {
+if ($sLink !== '' && $sLink !== 'index') {
     $fullLink = getFull($sLink);
     returnLink($fullLink);
     exit();
