@@ -15,6 +15,7 @@ $sql = <<<EOF
 CREATE TABLE IF NOT EXISTS "shortlink" (
 	"s"	TEXT NOT NULL UNIQUE,
 	"full"	TEXT NOT NULL,
+    "password"	TEXT NOT NULL,
 	PRIMARY KEY("s")
 )
 EOF;
@@ -24,6 +25,7 @@ if (!$ret) {
 }
 
 function returnLink($fullLink) {
+    header("location: " . $fullLink);
     $fullLink = str_replace("'", "\\'", $fullLink);
     echo "<html><body>";
     echo "<a href='" . $fullLink . "'>Redirecting to " . SQLite3::escapeString($fullLink) . "</a>";
@@ -50,10 +52,25 @@ function getRandomString($len){
 function addLink ($link) {
     global $db;
     $sLink = getRandomString(5);
-    $sql = "INSERT INTO shortlink VALUES ('" . SQLite3::escapeString($sLink) . "', '" . SQLite3::escapeString($link) . "')";
+    $password = getRandomString(8);
+    $sql = "INSERT INTO shortlink VALUES ('" . SQLite3::escapeString($sLink) . "', '" . SQLite3::escapeString($link) . "', '" . SQLite3::escapeString($password) . "')";
     $ret = $db->exec($sql);
     if (!$ret) {
-        return [-1, $db->lastErrorMsg()];
+        return ["status" => -1, "sLink" => $db->lastErrorMsg()];
     }
-    return [0, $sLink];
+    return ["status" => 0, "sLink" => $sLink, "password" => $password];
+}
+
+function changeLink ($data) {
+    global $db;
+    $password = $data->password;
+    $sLink = $data->sLink;
+    $newLink = $data->newLink;
+    $sql = "UPDATE shortlink SET full = '" . SQLite3::escapeString($newLink) . "' where s = '" . SQLite3::escapeString($sLink) . "' and password = '" . SQLite3::escapeString($password) . "'";
+    $ret = $db->exec($sql);
+
+    if (!$ret) {
+        return ["status" => -1, "sLink" => $db->lastErrorMsg()];
+    }
+    return ["status" => 0, "db" => $sql, "ret" => $ret];
 }

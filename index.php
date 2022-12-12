@@ -12,14 +12,16 @@ if ($sLink !== '' && $sLink !== 'index') {
     returnLink($fullLink);
     exit();
 }
+if (isset($_POST['change'])) {
+    $data = json_decode($_POST['change']);
+    $value = changeLink($data);
+    echo json_encode($value);
+    exit();
+}
 
 if (isset($_POST['fullLink'])){
-    $response_json = [];
     $value = addLink($_POST['fullLink']);
-
-    $response_json['status'] = $value[0];
-    $response_json['sLink'] = $value[1];
-    echo json_encode($response_json);
+    echo json_encode($value);
     exit();
 }
 
